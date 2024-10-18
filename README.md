@@ -86,8 +86,8 @@ https://hmsosaka.com/blog/karaoke7/
 ### 6. Web Audio API
 役割: ブラウザ上でユーザーの音声を取得し、録音された音声データをTensorFlow.jsでベクトル化して分析します。音声データの取得と前処理を行い、声質の特徴量を抽出するために使用します。
 
-## 画面遷移図
+### 画面遷移図
 Figma：https://www.figma.com/design/mU0TDb09QwTkA4McdZsrVy/%E7%84%A1%E9%A1%8C?node-id=0-1&t=7U5gkpZqWNCWh2sQ-1
 
-## ER図
+### ER図
 https://dbdiagram.io/d
