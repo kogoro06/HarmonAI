@@ -90,4 +90,4 @@ https://hmsosaka.com/blog/karaoke7/
 Figma：https://www.figma.com/design/mU0TDb09QwTkA4McdZsrVy/%E7%84%A1%E9%A1%8C?node-id=0-1&t=7U5gkpZqWNCWh2sQ-1
 
 ### ER図
-https://dbdiagram.io/d
+[https://dbdiagram.io/d](https://dbdiagram.io/d/6713406d97a66db9a3868632)
