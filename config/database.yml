@@ -82,7 +82,11 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: harmonai-db.flycast # Fly.ioのデータベースホスト名を設定
+  port: 5432
   database: myapp_production
-  username: myapp
-  password: <%= ENV["MYAPP_DATABASE_PASSWORD"] %>
+  username: postgres
+  password: <%= ENV["DATABASE_PASSWORD"] %>
