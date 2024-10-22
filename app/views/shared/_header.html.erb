@@ -2,13 +2,24 @@
   <div class="container mx-auto flex items-center justify-between p-4">
     <div class="flex items-center">
       <%= image_tag 'logo.png', class: 'h-full max-h-20 w-auto' %>
-      <h1 class="ml-4 text-2xl font-bold">HARMONAI</h1>
+      <%= link_to 'HARMONAI', static_pages_top_path, class: 'ml-4 text-2xl font-bold' %>
     </div>
     <nav class="flex space-x-8 text-lg">
-
-    <a href="#" class="text-center text-gray-600 font-bold">ログイン</a>
-    <a href="#" class="text-center text-gray-600 font-bold">新規登録</a>
-    <a href="#" class="text-center text-gray-600 font-bold">パスワード再発行</a>
+      <% if user_signed_in? %>
+        <li>
+          <%= link_to 'ログアウト', destroy_user_session_path, data: { turbo_method: :delete }, class: 'text-center text-gray-600 font-bold' %>
+        </li>
+      <% else %>
+        <li>
+          <%= link_to 'ログイン', new_user_session_path, class: 'text-center text-gray-600 font-bold' %>
+        </li>
+        <li>
+          <%= link_to '新規登録', new_user_registration_path, class: 'text-center text-gray-600 font-bold' %>
+        </li>
+        <li>
+          <%= link_to 'パスワード再発行', new_user_password_path, class: 'text-center text-gray-600 font-bold' %>
+        </li>
+      <% end %>
     </nav>
   </div>
 </header>
