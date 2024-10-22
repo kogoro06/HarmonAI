@@ -14,3 +14,4 @@ RUN mkdir /myapp
 WORKDIR /myapp
 RUN gem install bundler
 COPY . /myapp
+RUN npm install -g esbuild tailwindcss
