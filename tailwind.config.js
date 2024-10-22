@@ -10,7 +10,7 @@ module.exports = {
       // Tailwind CSSのテーマカスタマイズ
       colors: {
         customblue: '#174397',  // カスタムカラーの追加例
-        customred: "#fe5458"
+        customred: "#fe5458",
       },
       spacing: {
         '72': '18rem',           // カスタムの余白サイズの追加

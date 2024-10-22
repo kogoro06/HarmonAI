@@ -59,3 +59,5 @@ group :test do
 end
 gem "sassc-rails"
 gem "devise"
+gem 'devise-i18n'
+gem 'devise-i18n-views'
