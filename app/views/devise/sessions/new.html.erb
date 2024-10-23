@@ -1,27 +1,63 @@
-<h2>ログイン</h2>
+<div class="h-screen flex flex-col justify-center items-center bg-customred text-black">
+  <div class="bg-white p-8 rounded shadow-md w-full max-w-sm">
+    <!-- ログインのタイトル -->
+    <h2 class="text-2xl font-semibold mb-6 text-left">ログイン</h2>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <!-- ログインフォーム -->
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      
+      <!-- ユーザー名フィールド -->
+      <div class="mb-4 text-left text-white">
+        <%= f.label :name, class: "text-sm font-medium text-gray-700" %>
+        <%= f.text_field :name, autofocus: true, class: "block w-full px-3 py-2 rounded-md shadow-sm sm:text-sm" %>
+      </div>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name, autofocus: true %>
-  </div>
+      <!-- パスワードフィールド -->
+      <div class="mb-4 text-left text-white">
+        <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.password_field :password, id: "passwordField", autocomplete: "current-password", class: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm" %>
+      </div>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
+      <!-- パスワード表示/非表示のチェックボックス -->
+      <div class="mt-2">
+        <input type="checkbox" id="showPasswordCheckbox" class="mr-2">
+        <label for="showPasswordCheckbox" class="text-sm text-gray-600">パスワードを表示</label>
+      </div>
 
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+      <!-- Remember me チェックボックス -->
+      <% if devise_mapping.rememberable? %>
+        <div class="flex items-center mb-4 text-left">
+          <%= f.check_box :remember_me, class: "h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded" %>
+          <label for="remember_me" class="ml-2 block text-sm text-gray-900">パスワードを記憶</label>
+        </div>
+      <% end %>
+
+      <!-- ログインボタン -->
+      <div>
+        <%= f.submit "ログイン", class: "w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50" %>
+      </div>
+    <% end %>
+
+    <!-- リンク: 新規登録やパスワード忘れなど -->
+    <div class="mt-6">
+      <%= render "devise/shared/links" %>
     </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
   </div>
-<% end %>
+</div>
 
-<%= render "devise/shared/links" %>
+<!-- JavaScriptでパスワード表示機能を追加 -->
+<script>
+  // パスワード表示切り替えのスクリプト
+  const passwordField = document.getElementById('passwordField');
+  const showPasswordCheckbox = document.getElementById('showPasswordCheckbox');
+
+  showPasswordCheckbox.addEventListener('change', function() {
+    if (this.checked) {
+      // チェックされた場合、パスワードを表示
+      passwordField.type = 'text';
+    } else {
+      // チェックが外れた場合、パスワードを隠す
+      passwordField.type = 'password';
+    }
+  });
+</script>
