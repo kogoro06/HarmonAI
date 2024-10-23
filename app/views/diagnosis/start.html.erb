@@ -1,2 +1,134 @@
-<h1>Diagnosis#start</h1>
-<p>Find me in app/views/diagnosis/start.html.erb</p>
+<div class="h-screen flex flex-col justify-center items-center text-center">
+  <h1 class="text-3xl font-bold mb-6">声質タイプ診断</h1>
+
+  <h2 class="text-xl font-semibold mb-4">マイクに向かって歌ってください</h2>
+
+  <!-- 歌を表示するフォーム -->
+  <p class="mb-4">ドロップダウンから曲を選んで、歌詞を表示してください。</p>
+
+  <%= form_with url: diagnosis_start_path, method: :get, local: true, id: "songForm" do %>
+    <div class="form-group mb-4 w-full max-w-xs">
+      <label for="songSelect" class="block text-gray-700 text-sm font-bold mb-2">曲を選択:</label>
+      <select id="songSelect" class="form-control block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+        <option value="">-- 曲を選んでください --</option>
+        <option value="Twinkle, Twinkle, Little Star">きらきら星</option>
+        <option value="Happy Birthday">ハッピーバースデー</option>
+        <option value="Row, Row, Row Your Boat">こげよマイケル</option>
+        <option value="Jingle Bells">ジングルベル</option>
+      </select>
+    </div>
+  <% end %>
+
+  <!-- 選んだ歌の歌詞を表示 -->
+  <div id="songLyrics" class="mb-4 w-full max-w-xs">
+    <p id="lyricsDisplay" class="text-gray-600">曲を選択すると、歌詞が表示されます。</p>
+  </div>
+
+  <!-- 録音コントロール -->
+  <div class="flex space-x-4 mb-4">
+    <button id="startRecordingButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">録音開始</button>
+    <button id="stopRecordingButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50" disabled>録音停止</button>
+  </div>
+
+  <!-- 録音した音声を再生するプレイヤー -->
+  <audio id="audioPlayback" controls class="mt-4 w-full max-w-xs"></audio>
+
+  <!-- フォームとして音声データを送信 -->
+  <%= form_with(url: upload_audio_path, local: true, multipart: true, id: "uploadAudioForm") do %>
+    <input type="hidden" name="audio_data" id="audioDataInput">
+    <div class="form-group mt-4 w-full max-w-xs">
+      <%= submit_tag "録音を送信", class: "btn bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50", disabled: true, id: "submitRecordingButton" %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  const songSelect = document.getElementById("songSelect");
+  const lyricsDisplay = document.getElementById("lyricsDisplay");
+  const startRecordingButton = document.getElementById("startRecordingButton");
+  const stopRecordingButton = document.getElementById("stopRecordingButton");
+  const submitRecordingButton = document.getElementById("submitRecordingButton");
+  const audioPlayback = document.getElementById("audioPlayback");
+  const audioDataInput = document.getElementById("audioDataInput");
+
+  let mediaRecorder;
+  let audioChunks = [];
+
+  // 曲に対応する歌詞
+  const songLyrics = {
+    "Twinkle, Twinkle, Little Star": `
+      きらきらひかる<br>
+      おそらのほしよ<br>
+      まばたきしては<br>
+      みんなをみてる<br>
+    `,
+    "Happy Birthday": `
+      ハッピーバースデー トゥー ユー<br>
+      ハッピーバースデー トゥー ユー<br>
+      ハッピーバースデー ディア [名前]<br>
+      ハッピーバースデー トゥー ユー<br>
+    `,
+    "Row, Row, Row Your Boat": `
+      こげよマイケル こげよボートを<br>
+      ゆかいに たのしく いのち は たのし<br>
+    `,
+    "Jingle Bells": `
+      ジングルベル ジングルベル<br>
+      すずが なる<br>
+      きょうは たのしい<br>
+      クリスマス<br>
+    `
+  };
+
+  // ドロップダウンで選択された曲に応じて歌詞を表示
+  songSelect.addEventListener("change", function() {
+    const selectedSong = songSelect.value;
+    if (selectedSong && songLyrics[selectedSong]) {
+      lyricsDisplay.innerHTML = songLyrics[selectedSong];
+      startRecordingButton.disabled = false; // 録音開始ボタンを有効にする
+    } else {
+      lyricsDisplay.innerHTML = "曲を選択すると、歌詞が表示されます。";
+      startRecordingButton.disabled = true; // 曲が選択されていない場合は無効化
+    }
+  });
+
+  // マイクにアクセスして録音を開始
+  startRecordingButton.addEventListener("click", async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunks.push(event.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audioPlayback.src = audioUrl;
+
+        // BlobをBase64に変換してフォームにセット
+        const reader = new FileReader();
+        reader.readAsDataURL(audioBlob);
+        reader.onloadend = () => {
+          audioDataInput.value = reader.result; // Base64形式の音声データをhiddenフィールドにセット
+          submitRecordingButton.disabled = false; // 送信ボタンを有効化
+        };
+      };
+
+      mediaRecorder.start();
+      startRecordingButton.disabled = true; // 録音中は録音開始ボタンを無効化
+      stopRecordingButton.disabled = false; // 録音停止ボタンを有効化
+    } catch (error) {
+      console.error("マイクへのアクセスに失敗しました:", error);
+    }
+  });
+
+  // 録音を停止
+  stopRecordingButton.addEventListener("click", () => {
+    mediaRecorder.stop();
+    startRecordingButton.disabled = false;
+    stopRecordingButton.disabled = true;
+  });
+</script>
