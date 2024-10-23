@@ -1,37 +1,73 @@
-<div class="h-screen flex flex-col justify-center items-center text-center  bg-orange-400 text-white">
-<h2>Sign up</h2>
+<div class="h-screen flex flex-col justify-center items-center bg-customblue text-white">
+  <div class="bg-white p-8 rounded shadow-md w-full max-w-sm">
+    <!-- サインアップのタイトル -->
+    <h2 class="text-2xl font-semibold mb-6 text-left text-black">新規登録</h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+    <!-- サインアップフォーム -->
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
 
+      <!-- エラーメッセージの表示 -->
+      <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name, autofocus: true %>
+      <!-- ユーザー名フィールド -->
+      <div class="mb-4 text-left text-black">
+        <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :name, autofocus: true, class: "block text-white w-full px-3 py-2 rounded-md shadow-sm sm:text-sm" %>
+      </div>
+
+      <!-- メールアドレスフィールド -->
+      <div class="mb-4 text-left text-black">
+        <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.email_field :email, autocomplete: "email", class: "block text-white w-full px-3 py-2 rounded-md shadow-sm sm:text-sm" %>
+      </div>
+
+      <!-- パスワードフィールド -->
+      <div class="mb-4 text-left text-black">
+        <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
+        <% if @minimum_password_length %>
+          <em>(<%= @minimum_password_length %>文字以上)</em>
+        <% end %>
+        <%= f.password_field :password, id: "passwordField", autocomplete: "new-password", class: "block text-white w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm" %>
+      </div>
+
+      <!-- パスワード表示/非表示のチェックボックス -->
+      <div class="mt-2">
+        <input type="checkbox" id="showPasswordCheckbox" class="mr-2">
+        <label for="showPasswordCheckbox" class="text-sm text-gray-600">パスワードを表示</label>
+      </div>
+
+      <!-- パスワード確認フィールド -->
+      <div class="mb-4 text-left text-black">
+        <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "block text-white w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm" %>
+      </div>
+
+      <!-- サインアップボタン -->
+      <div>
+        <%= f.submit "新規登録", class: "w-full bg-customred text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50" %>
+      </div>
+    <% end %>
+
+    <!-- リンク: 新規登録やパスワード忘れなど -->
+    <div class="mt-6 text-black">
+      <%= render "devise/shared/links" %>
+    </div>
   </div>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autocomplete: "email" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
 </div>
+
+<!-- JavaScriptでパスワード表示機能を追加 -->
+<script>
+  // パスワード表示切り替えのスクリプト
+  const passwordField = document.getElementById('passwordField');
+  const showPasswordCheckbox = document.getElementById('showPasswordCheckbox');
+
+  showPasswordCheckbox.addEventListener('change', function() {
+    if (this.checked) {
+      // チェックされた場合、パスワードを表示
+      passwordField.type = 'text';
+    } else {
+      // チェックが外れた場合、パスワードを隠す
+      passwordField.type = 'password';
+    }
+  });
+</script>
