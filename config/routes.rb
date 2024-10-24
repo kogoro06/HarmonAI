@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
+  get "introduce/index"
   get "homes/top"
   get "diagnosis/start"
   get "static_pages/top"
+  get 'introduce', to: 'introduce#index', as: :introduce
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -12,6 +14,7 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   get "start_diagnosis", to: "diagnosis#start"
+  post 'diagnosis/upload_audio', to: 'diagnosis#upload_audio', as: 'upload_audio'
 
   # Defines the root path route ("/")
   # root "posts#index"
