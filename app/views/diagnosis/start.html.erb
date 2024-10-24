@@ -43,6 +43,10 @@
 </div>
 
 <script>
+document.addEventListener("turbo:load", init);
+document.addEventListener("DOMContentLoaded", init);
+
+function init() {
   const songSelect = document.getElementById("songSelect");
   const lyricsDisplay = document.getElementById("lyricsDisplay");
   const startRecordingButton = document.getElementById("startRecordingButton");
@@ -73,7 +77,7 @@
       ゆかいに たのしく いのち は たのし<br>
     `,
     "Jingle Bells": `
-      ジングルベル ジングルベル<br>
+      ジングルベルジングルベル<br>
       すずが なる<br>
       きょうは たのしい<br>
       クリスマス<br>
@@ -131,4 +135,5 @@
     startRecordingButton.disabled = false;
     stopRecordingButton.disabled = true;
   });
+}
 </script>
