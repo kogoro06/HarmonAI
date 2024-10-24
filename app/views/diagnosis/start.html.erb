@@ -1,10 +1,11 @@
-<div class="h-screen flex flex-col justify-center items-center text-center">
+<div class="h-screen flex flex-col justify-center items-center text-center bg-customblue">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-sm text-black">
   <h1 class="text-3xl font-bold mb-6">声質タイプ診断</h1>
 
   <h2 class="text-xl font-semibold mb-4">マイクに向かって歌ってください</h2>
 
   <!-- 歌を表示するフォーム -->
-  <p class="mb-4">ドロップダウンから曲を選んで、歌詞を表示してください。</p>
+  <p class="mb-4">ドロップダウンから曲を選んで、<br>歌詞を表示してください。</p>
 
   <%= form_with url: diagnosis_start_path, method: :get, local: true, id: "songForm" do %>
     <div class="form-group mb-4 w-full max-w-xs">
@@ -25,8 +26,8 @@
   </div>
 
   <!-- 録音コントロール -->
-  <div class="flex space-x-4 mb-4">
-    <button id="startRecordingButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">録音開始</button>
+  <div class="flex space-x-4 mb-4 justify-center">
+    <button id="startRecordingButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" disabled>録音開始</button>
     <button id="stopRecordingButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50" disabled>録音停止</button>
   </div>
 
@@ -40,6 +41,7 @@
       <%= submit_tag "録音を送信", class: "btn bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50", disabled: true, id: "submitRecordingButton" %>
     </div>
   <% end %>
+</div>
 </div>
 
 <script>
